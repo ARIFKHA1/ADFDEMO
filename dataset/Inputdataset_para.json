@@ -19,7 +19,7 @@
 					"value": "@dataset().Filename",
 					"type": "Expression"
 				},
-				"folderPath": "Output",
+				"folderPath": "Final Output",
 				"container": "adfdemo"
 			},
 			"columnDelimiter": ",",
