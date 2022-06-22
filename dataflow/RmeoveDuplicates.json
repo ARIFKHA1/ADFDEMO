@@ -6,14 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "EMPDataset",
-						"type": "DatasetReference"
-					},
-					"name": "source1"
-				},
-				{
-					"dataset": {
-						"referenceName": "EMPDataset",
+						"referenceName": "EmpDataset",
 						"type": "DatasetReference"
 					},
 					"name": "source2"
@@ -22,13 +15,16 @@
 			"sinks": [],
 			"transformations": [],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          empid as string,",
+				"          name as string,",
+				"          country as string,",
+				"          department as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     rowUrlColumn: 'FileName') ~> source1",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source2"
+				"     rowUrlColumn: 'Filename') ~> source2"
 			]
 		}
 	}
