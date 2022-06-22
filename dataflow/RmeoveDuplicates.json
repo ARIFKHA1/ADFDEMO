@@ -10,10 +10,24 @@
 						"type": "DatasetReference"
 					},
 					"name": "source2"
+				},
+				{
+					"dataset": {
+						"referenceName": "EmpDataset2",
+						"type": "DatasetReference"
+					},
+					"name": "source3"
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "union1"
+				},
+				{
+					"name": "aggregate1"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          empid as string,",
@@ -24,7 +38,21 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     rowUrlColumn: 'Filename') ~> source2"
+				"     rowUrlColumn: 'Filename') ~> source2",
+				"source(output(",
+				"          empid as string,",
+				"          name as string,",
+				"          country as string,",
+				"          department as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     inferDriftedColumnTypes: true,",
+				"     ignoreNoFilesFound: false,",
+				"     rowUrlColumn: 'Filename') ~> source3",
+				"source2, source3 union(byName: true)~> union1",
+				"union1 aggregate(groupBy(empid),",
+				"     name = ERROR_FUNCTION('')) ~> aggregate1"
 			]
 		}
 	}
