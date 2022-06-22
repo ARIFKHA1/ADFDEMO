@@ -5,19 +5,11 @@
 		"typeProperties": {
 			"sources": [
 				{
-					"dataset": {
-						"referenceName": "InputDataset",
-						"type": "DatasetReference"
-					},
 					"name": "source1"
 				}
 			],
 			"sinks": [
 				{
-					"dataset": {
-						"referenceName": "OutputDataset",
-						"type": "DatasetReference"
-					},
 					"name": "sink1"
 				}
 			],
@@ -39,8 +31,7 @@
 				"          Column_1 as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1",
+				"     validateSchema: false) ~> source1",
 				"source1 derive(EmpNo = substring(Column_1, 0, 4),",
 				"          EmpName = substring(Column_1, 5, 11),",
 				"          State = substring(Column_1, 16, 2),",
