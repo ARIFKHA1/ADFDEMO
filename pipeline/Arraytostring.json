@@ -1,10 +1,10 @@
 {
-	"name": "Gefilecount",
+	"name": "Arraytostring",
 	"properties": {
 		"activities": [
 			{
-				"name": "Get Metadata1",
-				"type": "GetMetadata",
+				"name": "Lookup1",
+				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
@@ -15,29 +15,30 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
 					"dataset": {
-						"referenceName": "InputDataset",
+						"referenceName": "Inputdataset",
 						"type": "DatasetReference"
 					},
-					"fieldList": [
-						"childItems"
-					],
-					"storeSettings": {
-						"type": "AzureBlobStorageReadSettings",
-						"recursive": true,
-						"enablePartitionDiscovery": false
-					},
-					"formatSettings": {
-						"type": "DelimitedTextReadSettings"
-					}
+					"firstRowOnly": false
 				}
 			},
 			{
-				"name": "Set variable2",
-				"type": "SetVariable",
+				"name": "ForEach1",
+				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Get Metadata1",
+						"activity": "Lookup1",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -45,38 +46,43 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "FileCount",
-					"value": {
-						"value": "@string(length(activity('Get Metadata1').output.childItems))",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "If Condition1",
-				"type": "IfCondition",
-				"dependsOn": [
-					{
-						"activity": "Set variable2",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"expression": {
-						"value": "@equals(variables('FileCount'), '5')",
+					"items": {
+						"value": "@activity('Lookup1').output.value",
 						"type": "Expression"
 					},
-					"ifTrueActivities": [
+					"isSequential": true,
+					"activities": [
 						{
-							"name": "Wait1",
-							"type": "Wait",
+							"name": "TempVariable",
+							"type": "SetVariable",
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
-								"waitTimeInSeconds": 1
+								"variableName": "TempEmail",
+								"value": {
+									"value": "@variables('Emailarray')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Emailarray",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "TempVariable",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Emailarray",
+								"value": {
+									"value": "@concat(variables('TempEmail'),';', item().email)",
+									"type": "Expression"
+								}
 							}
 						}
 					]
@@ -84,7 +90,10 @@
 			}
 		],
 		"variables": {
-			"FileCount": {
+			"TempEmail": {
+				"type": "String"
+			},
+			"Emailarray": {
 				"type": "String"
 			}
 		},
