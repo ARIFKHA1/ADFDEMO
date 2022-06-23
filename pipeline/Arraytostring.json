@@ -53,47 +53,47 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "TempVariable",
-							"type": "SetVariable",
+							"name": "Append variable1",
+							"type": "AppendVariable",
 							"dependsOn": [],
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "TempEmail",
-								"value": {
-									"value": "@variables('Emailarray')",
-									"type": "Expression"
-								}
-							}
-						},
-						{
-							"name": "Emailarray",
-							"type": "SetVariable",
-							"dependsOn": [
-								{
-									"activity": "TempVariable",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
 							"userProperties": [],
 							"typeProperties": {
 								"variableName": "Emailarray",
 								"value": {
-									"value": "@concat(variables('TempEmail'),';', item().email)",
+									"value": "@item().email",
 									"type": "Expression"
 								}
 							}
 						}
 					]
 				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "EmailString",
+					"value": {
+						"value": "@join(variables('Emailarray'),';')",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {
-			"TempEmail": {
-				"type": "String"
-			},
 			"Emailarray": {
+				"type": "Array"
+			},
+			"EmailString": {
 				"type": "String"
 			}
 		},
