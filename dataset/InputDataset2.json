@@ -1,5 +1,5 @@
 {
-	"name": "Inputdataset",
+	"name": "InputDataset2",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "LKinputblob",
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "Emp_data.txt",
+				"fileName": "Emp_data1.txt",
 				"folderPath": "Input",
 				"container": "adfdemo"
 			},
@@ -19,11 +19,6 @@
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": [
-			{
-				"name": "Email",
-				"type": "String"
-			}
-		]
+		"schema": []
 	}
 }
